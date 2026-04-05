@@ -1,12 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Modal, Space, message } from "antd";
 import { useMemo, useState } from "react";
-import { DefenseSummarySection } from "../../components/defense/DefenseSummarySection";
-import { MinutePanel } from "../../components/defense/MinutePanel";
 import { PageHeader } from "../../components/common/PageHeader";
 import { SectionCard } from "../../components/common/SectionCard";
+import { DefenseSummarySection } from "../../components/defense/DefenseSummarySection";
+import { MinutePanel } from "../../components/defense/MinutePanel";
 import { RegistrationTable } from "../../components/tables/RegistrationTable";
-import { generateMinutes, getMinutesByRegistration } from "../../services/minutes.api";
+import {
+  generateMinutes,
+  getMinutesByRegistration,
+} from "../../services/minutes.api";
 import {
   getRegistrationDetail,
   getRegistrations,
@@ -21,9 +24,8 @@ import { getErrorMessage } from "../../utils/errors";
 import { queryKeys } from "../../utils/query-keys";
 
 export default function LecturerSecretaryPage() {
-  const [selectedRegistration, setSelectedRegistration] = useState<Registration | null>(
-    null,
-  );
+  const [selectedRegistration, setSelectedRegistration] =
+    useState<Registration | null>(null);
   const queryClient = useQueryClient();
 
   const registrationsQuery = useQuery({
@@ -102,13 +104,8 @@ export default function LecturerSecretaryPage() {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: ({
-      id,
-      status,
-    }: {
-      id: number | string;
-      status: string;
-    }) => updateStatus(id, { status }),
+    mutationFn: ({ id, status }: { id: number | string; status: string }) =>
+      updateStatus(id, { status }),
     onSuccess: async () => {
       message.success("Đã cập nhật trạng thái sau bảo vệ.");
       await refreshSelectedRegistrationData();
@@ -131,12 +128,6 @@ export default function LecturerSecretaryPage() {
       <SectionCard title="Danh sách cần tổng hợp">
         <RegistrationTable
           data={registrationsQuery.data ?? []}
-          extraColumns={[
-            {
-              title: "Điểm final",
-              render: (_, record) => record.finalScore ?? "--",
-            },
-          ]}
           actions={(registration) => (
             <Space wrap>
               <Button
